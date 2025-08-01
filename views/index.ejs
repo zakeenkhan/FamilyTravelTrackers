@@ -4,32 +4,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Travel Tracker</title>
+  <title>Family Travel Tracker - Made by Zakeen Khan</title>
   <link rel="stylesheet" href="./styles/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-  <form class="tab-view tab-view-height-auto" action="/user" method="post">
-    <% users.forEach(function(user) { %>
-      <input type="submit" name="user" value="<%= user.id %>" id="<%= user.id %>">
-      <label for="<%= user.id %>" style="background-color: <%= user.color %>;">
-        <%= user.name %>
-      </label>
-      <% }); %>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-globe-americas"></i>
+          <h1>Family Travel Tracker</h1>
+        </div>
+        <div class="welcome-message">
+          <h2>🌍 Welcome to Your Travel Adventure! ✈️</h2>
+          <p>Track your family's amazing journeys around the world</p>
+        </div>
+        <div class="made-by">
+          <p>Made with ❤️ by <strong>Zakeen Khan</strong></p>
+        </div>
+      </div>
+    </div>
+  </header>
 
-        <input type="submit" name="add" value="new" id="tab">
-        <label for="tab">Add Family Member</label>
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- User Selection Section -->
+    <section class="user-section">
+      <div class="container">
+        <h3><i class="fas fa-users"></i> Select Family Member</h3>
+        <form class="user-tabs" action="/user" method="post">
+          <% users.forEach(function(user) { %>
+            <input type="submit" name="user" value="<%= user.id %>" id="<%= user.id %>" class="user-input">
+            <label for="<%= user.id %>" class="user-tab user-color" data-color="<%= user.color %>">
+              <i class="fas fa-user"></i>
+              <%= user.name %>
+            </label>
+          <% }); %>
 
-  </form>
+          <input type="submit" name="add" value="new" id="tab" class="user-input">
+          <label for="tab" class="user-tab add-member">
+            <i class="fas fa-plus"></i>
+            Add Family Member
+          </label>
+        </form>
+      </div>
+    </section>
 
-  <form action="/add" method="post">
-    <input type="text" name="country" autofocus placeholder="<%= locals.error ? error :  'Enter country name'%>">
-    <button type="submit" style="background-color: <%= color %>;">Add</button>
-  </form>
+    <!-- Country Input Section -->
+    <section class="input-section">
+      <div class="container">
+        <h3><i class="fas fa-map-marker-alt"></i> Add New Country</h3>
 
-  <section class="ag-canvas">
-    <svg class="ag-canvas_svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-      version="1.1" viewBox="0 0 1008 651">
+        <!-- Error Message -->
+        <% if (locals.error) { %>
+          <div class="message error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <%= error %>
+          </div>
+        <% } %>
+
+        <!-- Success Message -->
+        <% if (locals.success) { %>
+          <div class="message success-message">
+            <i class="fas fa-check-circle"></i>
+            <%= success %>
+          </div>
+        <% } %>
+
+        <form action="/add" method="post" class="country-form">
+          <div class="input-group">
+            <input type="text" name="country" autofocus placeholder="Enter country name (e.g., France, Japan, Brazil)" class="country-input">
+            <button type="submit" class="add-btn" style="background-color: <%= color || '#27ae60' %>;">
+              <i class="fas fa-plus"></i>
+              Add Country
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- World Map Section -->
+    <section class="map-section">
+      <div class="container">
+        <div class="map-header">
+          <h3><i class="fas fa-globe"></i> World Travel Map</h3>
+          <div class="travel-stats">
+            <div class="stat-item">
+              <span class="stat-number"><%= total %></span>
+              <span class="stat-label">Countries Visited</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number"><%= Math.round((total/195)*100) %>%</span>
+              <span class="stat-label">World Explored</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ag-canvas">
+          <!-- Country name tooltip -->
+          <div id="country-tooltip" class="country-tooltip"></div>
+          <svg class="ag-canvas_svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1" viewBox="0 0 1008 651">
       <path id="AE" title="United Arab Emirates"
         d="M619.874,393.722L620.373,393.573L620.477,394.411L622.671,393.93L624.99,394.009L626.684,394.1L628.604,392.028L630.695,390.054L632.467,388.146L633.001,389.202L633.382,391.639L631.949,391.651L631.72,393.648L632.216,394.073L630.947,394.674L630.939,395.919L630.122,397.175L630.049,398.394L629.484,399.032L621.056,397.508L619.981,394.428z" />
 
@@ -383,15 +462,147 @@
         d="M567.105,489.207L568.429,490.466L569.142,492.868L568.664,493.636L568.101,495.938L568.639,498.299L567.757,499.292L566.906,501.951L568.38,502.695L559.872,505.065L560.138,507.12L558.014,507.516L556.417,508.67L556.076,509.676L555.073,509.904L552.634,512.299L551.082,514.192L550.135,514.26L549.224,513.922L546.09,513.602L545.586,513.383L545.565,513.141L544.458,512.482L542.641,512.314L540.345,512.978L538.515,511.155L536.623,508.778L536.752,499.62L542.591,499.656L542.352,498.67L542.77,497.602L542.277,496.266L542.596,494.887L542.299,494.006L543.267,494.077L543.427,494.96L544.741,494.891L546.521,495.153L547.458,496.444L549.704,496.841L551.418,495.943L552.047,497.435L554.196,497.833L555.229,499.049L556.38,500.622L558.526,500.646L558.292,497.566L557.522,498.084L555.562,496.976L554.805,496.469L555.152,493.618L555.65,490.267L555.022,489.021L555.821,487.222L556.573,486.885L560.339,486.41L561.443,486.696L562.615,487.413L563.732,487.885L565.514,488.359z" />
       <path id="ZW" title="Zimbabwe"
         d="M562.709,526.998L561.219,526.697L560.274,527.059L558.917,526.548L557.776,526.516L555.989,525.158L553.821,524.698L552.996,522.803L552.989,521.752L551.788,521.432L548.615,518.177L547.733,516.471L547.169,515.946L546.09,513.602L549.224,513.922L550.135,514.26L551.082,514.192L552.634,512.299L555.073,509.904L556.076,509.676L556.417,508.67L558.014,507.516L560.138,507.12L560.319,508.2L562.658,508.142L563.957,508.754L564.562,509.472L565.896,509.683L567.353,510.617L567.359,514.312L566.813,516.347L566.692,518.55L567.143,519.426L566.826,521.172L566.402,521.443L565.663,523.593z" />
-    </svg>
-  </section>
-  <h2 class="total-count">Total Countries: <%=total%>
-  </h2>
+          </svg>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-left">
+          <p>&copy; 2025 Family Travel Tracker</p>
+          <p>Made with ❤️ by <strong>Zakeen Khan</strong></p>
+        </div>
+        <div class="footer-right">
+          <div class="social-links">
+            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script>
+    // Set user tab colors
+    document.querySelectorAll('.user-color').forEach(tab => {
+      const color = tab.getAttribute('data-color');
+      tab.style.backgroundColor = color;
+      tab.style.color = '#fff';
+    });
+
+    // Color visited countries on the map
     const country_codes = "<%= countries %>".split(",")
-    console.log(typeof ("<%= countries %>"))
     country_codes.forEach(code => {
-      document.getElementById(code).style.fill = "<%= color %>"
+      const countryElement = document.getElementById(code);
+      if (countryElement) {
+        countryElement.style.fill = "<%= color || '#27ae60' %>";
+        countryElement.style.stroke = "#fff";
+        countryElement.style.strokeWidth = "1";
+      }
+    });
+
+    // Get tooltip element
+    const tooltip = document.getElementById('country-tooltip');
+
+    // Add hover effects to countries
+    document.querySelectorAll('svg path').forEach(path => {
+      path.addEventListener('mouseenter', function(e) {
+        if (!country_codes.includes(this.id)) {
+          this.style.fill = '#4a90e2';
+        }
+        this.style.cursor = 'pointer';
+
+        // Show country name tooltip
+        const countryName = this.getAttribute('title');
+        const countryCode = this.id;
+        if (countryName) {
+          const isVisited = country_codes.includes(countryCode);
+          tooltip.textContent = countryName + (isVisited ? ' ✓ Visited' : '');
+          tooltip.style.backgroundColor = isVisited ? 'rgba(39, 174, 96, 0.9)' : 'rgba(0, 0, 0, 0.9)';
+          tooltip.classList.add('show');
+
+          // Position tooltip relative to the map container
+          const mapContainer = document.querySelector('.ag-canvas');
+          const mapRect = mapContainer.getBoundingClientRect();
+          tooltip.style.left = (e.clientX - mapRect.left + 10) + 'px';
+          tooltip.style.top = (e.clientY - mapRect.top - 40) + 'px';
+        }
+      });
+
+      path.addEventListener('mousemove', function(e) {
+        // Update tooltip position as mouse moves
+        if (tooltip.classList.contains('show')) {
+          const mapContainer = document.querySelector('.ag-canvas');
+          const mapRect = mapContainer.getBoundingClientRect();
+          tooltip.style.left = (e.clientX - mapRect.left + 10) + 'px';
+          tooltip.style.top = (e.clientY - mapRect.top - 40) + 'px';
+        }
+      });
+
+      path.addEventListener('mouseleave', function() {
+        if (!country_codes.includes(this.id)) {
+          this.style.fill = '#e9ecef';
+        }
+
+        // Hide tooltip
+        tooltip.classList.remove('show');
+      });
+
+      // Add click handler to show country name (useful for mobile)
+      path.addEventListener('click', function(e) {
+        const countryName = this.getAttribute('title');
+        const countryCode = this.id;
+
+        if (countryName) {
+          // Show an alert or console log with country info
+          console.log(`Country: ${countryName} (${countryCode})`);
+
+          // Optional: Show a temporary message
+          const tempMessage = document.createElement('div');
+          tempMessage.textContent = `${countryName} (${countryCode})`;
+          tempMessage.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            z-index: 1001;
+            animation: fadeInOut 3s ease-in-out;
+          `;
+
+          // Add fade animation
+          const style = document.createElement('style');
+          style.textContent = `
+            @keyframes fadeInOut {
+              0% { opacity: 0; transform: translateX(100%); }
+              20% { opacity: 1; transform: translateX(0); }
+              80% { opacity: 1; transform: translateX(0); }
+              100% { opacity: 0; transform: translateX(100%); }
+            }
+          `;
+          document.head.appendChild(style);
+
+          document.body.appendChild(tempMessage);
+
+          // Remove message after animation
+          setTimeout(() => {
+            if (tempMessage.parentNode) {
+              tempMessage.parentNode.removeChild(tempMessage);
+            }
+            if (style.parentNode) {
+              style.parentNode.removeChild(style);
+            }
+          }, 3000);
+        }
+      });
     });
   </script>
 </body>

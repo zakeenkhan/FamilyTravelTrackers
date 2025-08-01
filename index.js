@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8000;
 
 // NeonDB connection using connection string
 const db = new pg.Client({
@@ -24,7 +24,7 @@ async function connectDB() {
     console.log("Connected to NeonDB successfully!");
   } catch (err) {
     console.error("Database connection error:", err);
-    process.exit(1);
+    console.log("Server will continue running, but database operations may fail.");
   }
 }
 
@@ -58,38 +58,67 @@ async function getCurrentUser() {
   return users.find((user) => user.id == currentUserId);
 }
 app.get("/", async (req, res) => {
-  const countries = await checkVisisted();
-  const currentUser = await getCurrentUser();
-  res.render("index.ejs", {
-    countries: countries,
-    total: countries.length,
-    users: users,
-    color: currentUser.color,
-  });
+  try {
+    const countries = await checkVisisted();
+    const currentUser = await getCurrentUser();
+
+    // Get error and success messages from query parameters
+    const error = req.query.error;
+    const success = req.query.success;
+
+    res.render("index.ejs", {
+      countries: countries,
+      total: countries.length,
+      users: users,
+      color: currentUser ? currentUser.color : '#27ae60',
+      error: error,
+      success: success
+    });
+  } catch (error) {
+    console.error("Error in / route:", error);
+    res.status(500).send("Server Error: " + error.message);
+  }
 });
 app.post("/add", async (req, res) => {
   const input = req.body["country"];
-  const currentUser = await getCurrentUser();
+
+  if (!input || input.trim() === "") {
+    return res.redirect("/?error=" + encodeURIComponent("Please enter a country name"));
+  }
 
   try {
+    await getCurrentUser(); // Ensure user data is fresh
+
+    // Search for country
     const result = await db.query(
       "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%' || $1 || '%';",
       [input.toLowerCase()]
     );
 
+    if (result.rows.length === 0) {
+      return res.redirect("/?error=" + encodeURIComponent(`Country "${input}" not found. Please check the spelling.`));
+    }
+
     const data = result.rows[0];
     const countryCode = data.country_code;
+
     try {
       await db.query(
         "INSERT INTO visited_countries (country_code, user_id) VALUES ($1, $2)",
         [countryCode, currentUserId]
       );
-      res.redirect("/");
+      res.redirect("/?success=" + encodeURIComponent(`${input} added successfully!`));
     } catch (err) {
-      console.log(err);
+      console.log("Insert error:", err);
+      if (err.code === '23505') { // Unique constraint violation
+        res.redirect("/?error=" + encodeURIComponent(`${input} is already in your visited countries list.`));
+      } else {
+        res.redirect("/?error=" + encodeURIComponent("Failed to add country. Please try again."));
+      }
     }
   } catch (err) {
-    console.log(err);
+    console.log("Database error:", err);
+    res.redirect("/?error=" + encodeURIComponent("Database error. Please try again."));
   }
 });
 app.post("/user", async (req, res) => {
@@ -105,15 +134,28 @@ app.post("/new", async (req, res) => {
   const name = req.body.name;
   const color = req.body.color;
 
-  const result = await db.query(
-    "INSERT INTO users (name, color) VALUES($1, $2) RETURNING *;",
-    [name, color]
-  );
+  if (!name || name.trim() === "") {
+    return res.render("new.ejs", { error: "Please enter your name" });
+  }
 
-  const id = result.rows[0].id;
-  currentUserId = id;
+  if (!color) {
+    return res.render("new.ejs", { error: "Please select a color" });
+  }
 
-  res.redirect("/");
+  try {
+    const result = await db.query(
+      "INSERT INTO users (name, color) VALUES($1, $2) RETURNING *;",
+      [name.trim(), color]
+    );
+
+    const id = result.rows[0].id;
+    currentUserId = id;
+
+    res.redirect("/?success=" + encodeURIComponent(`Welcome ${name}! You can now start adding countries.`));
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.render("new.ejs", { error: "Failed to create user. Please try again." });
+  }
 });
 
 app.listen(port, () => {
