@@ -158,6 +158,30 @@ app.post("/new", async (req, res) => {
   }
 });
 
+// Health check endpoint for deployment monitoring
+app.get('/health', async (_req, res) => {
+  try {
+    // Check database connection
+    await db.query('SELECT 1');
+
+    res.status(200).json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      database: 'connected',
+      environment: process.env.NODE_ENV || 'development',
+      version: '1.0.0'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
+  console.log(`Health check available at http://localhost:${port}/health`);
 });
