@@ -187,4 +187,5 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-module.exports.handler = serverless(app);
+// Export the handler
+exports.handler = serverless(app);
