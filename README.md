@@ -1,4 +1,4 @@
-# 🌍 Family Travel Tracker ✈️
+# 🌍 Family Travel Tracker - Netlify Ready! ✈️
 
 **Made with ❤️ by Zakeen Khan**
 
@@ -45,10 +45,10 @@ A beautiful, modern web application to track and visualize your family's travel 
 
 ## 📸 Screenshots
 
-| | |
-|:-------------------------:|:-------------------------:|
-| ![Screenshot 1](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/ss/adding.JPG) | ![Screenshot 2](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/ss/capter.JPG) |
-| ![Screenshot 3](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/ss/visited.JPG) | ![Screenshot 4](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/ss/world.JPG) |
+![Adding a family member](public/screenshort/adding.JPG)
+![Capturing a visited country](public/screenshort/capter.JPG)
+![List of visited countries](public/screenshort/visited.JPG)
+![World map visualization](public/screenshort/world.JPG)
 
 ## 🛠️ Technologies Used
 
