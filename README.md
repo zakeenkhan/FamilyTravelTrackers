@@ -47,8 +47,8 @@ A beautiful, modern web application to track and visualize your family's travel 
 
 | | |
 |:-------------------------:|:-------------------------:|
-| ![Screenshot 1](SS/1.JPG) | ![Screenshot 2](SS/2.JPG) |
-| ![Screenshot 3](SS/3.JPG) | ![Screenshot 4](SS/4.JPG) |
+| ![Screenshot 1](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/SS/1.JPG) | ![Screenshot 2](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/SS/2.JPG) |
+| ![Screenshot 3](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/SS/3.JPG) | ![Screenshot 4](https://raw.githubusercontent.com/zakeenkhan/FamilyTravelTrackers/main/SS/4.JPG) |
 
 ## 🛠️ Technologies Used
 
