@@ -42,6 +42,14 @@ A beautiful, modern web application to track and visualize your family's travel 
 - Secure environment variable management
 - Production-ready deployment configuration
 
+
+## 📸 Screenshots
+
+| | |
+|:-------------------------:|:-------------------------:|
+| ![Screenshot 1](SS/1.JPG) | ![Screenshot 2](SS/2.JPG) |
+| ![Screenshot 3](SS/3.JPG) | ![Screenshot 4](SS/4.JPG) |
+
 ## 🛠️ Technologies Used
 
 ### Backend
@@ -227,13 +235,7 @@ If you encounter any issues or have questions:
 
 **Zakeen Khan** - Full Stack Developer passionate about creating beautiful, functional web applications that solve real-world problems.
 
-### Connect with me:
-- 🌐 Portfolio: [Your Portfolio URL]
-- 💼 LinkedIn: [Your LinkedIn]
-- 🐱 GitHub: [Your GitHub]
-- 🐦 Twitter: [Your Twitter]
 
----
 
 **⭐ If you found this project helpful, please give it a star!**
 
