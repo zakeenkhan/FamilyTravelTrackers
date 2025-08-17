@@ -83,7 +83,7 @@ A beautiful, modern web application to track and visualize your family's travel 
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/zakeenkhan/FamilyTravelTrackers.git
    cd FamilyTravelTrackers
    ```
 
